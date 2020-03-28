@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import telebot
-from time import sleep
-import random
 
 from core import CommandProcessor
 from utils import json_handler
@@ -22,22 +20,35 @@ def start_message(message):
 
 @bot.message_handler(commands=['kek'])
 def start_message(message):
-    # TODO: REWRITE!!!!!
     for i in range(10):
         bot.send_message(message.chat.id, cp.kek())
-        sleep(0.1)
-    ###################
+
+
+@bot.message_handler(commands=['roll'])
+def start_message(message):
+    bot.send_message(message.chat.id, cp.roll(str(message.text)))
+
+
+@bot.message_handler(commands=['errors'])
+def start_message(message):
+    bot.send_message(message.chat.id, cp.error())
 
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
-    if message.text == 'Привет':
-        bot.send_message(message.chat.id, cp.hello())
-    else:
-        bot.send_message(message.chat.id, cp.random_kek())
+    if message.chat.type == 'private':
+        if message.text == 'Привет':
+            bot.send_message(message.chat.id, cp.hello())
+        else:
+            bot.send_message(message.chat.id, cp.random_kek())
 
 
 @bot.message_handler(content_types=['sticker'])
 def send_sticker(message):
     stickers = bot.get_sticker_set(json_handler.constants['sticketset_name']).stickers
     bot.send_sticker(message.chat.id, cp.random_sticker(stickers))
+
+
+@bot.message_handler(content_types=['photo'])
+def send_sticker(message):
+    bot.send_photo(message.chat.id, cp.get_picture())

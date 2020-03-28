@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import random
 
 from utils import json_handler, debug, info
@@ -8,6 +9,7 @@ from utils import json_handler, debug, info
 class CommandProcessor(object):
     def __init__(self):
         self.TAG = "CommandProcessor"
+        self.picture_dir = os.environ['KEKTOR3000_HOME'] + os.sep + "pictures" + os.sep
 
     def start(self):
         """
@@ -66,6 +68,16 @@ class CommandProcessor(object):
         num = random.randint(1, 100 * len(stickers))
         return stickers[num // 100].file_id
 
+    def get_picture(self):
+        """
+        Get picture file
+
+        :return: picture
+        :rtype: file
+        """
+
+        return open(self.picture_dir + json_handler.constants['default_picture'], 'rb')
+
     def roll(self, argument):
         """
         Choice of provided options
@@ -76,7 +88,10 @@ class CommandProcessor(object):
 
         info(self.TAG, "roll")
 
-        sentence = " ".join(argument)
+        if len(argument) < 6:
+            return json_handler.messages['no_choices_answer']
+
+        sentence = argument[6:]
         choices = sentence.split("или")
 
         while choices.count("или") != 0:
