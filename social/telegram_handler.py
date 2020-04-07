@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
 
+#  Copyright (c) 2020.
+#
+#  Created by AnyKeyShik Rarity
+#
+#  Telegram: @AnyKeyShik
+#  GitHub: https://github.com/AnyKeyShik
+#  E-mail: nikitav59@gmail.com
+
 import telebot
 
 from core import CommandProcessor
-from utils import json_handler
+from utils import json_handler, debug
 
 bot = telebot.TeleBot(json_handler.auth_constants['api_token'])
 cp = CommandProcessor()
+TAG = 'TELEGRAM HANDLER'
 
 
 def start():
@@ -19,25 +28,26 @@ def start_message(message):
 
 
 @bot.message_handler(commands=['kek'])
-def start_message(message):
+def kek_message(message):
     for i in range(10):
         bot.send_message(message.chat.id, cp.kek())
 
 
 @bot.message_handler(commands=['roll'])
-def start_message(message):
+def roll_message(message):
     bot.send_message(message.chat.id, cp.roll(str(message.text)))
 
 
 @bot.message_handler(commands=['errors'])
-def start_message(message):
-    bot.send_message(message.chat.id, cp.error())
+def errors_message(message):
+    bot.send_message(message.chat.id, cp.error(), parse_mode='Markdown', disable_web_page_preview=True)
 
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
+    debug(TAG, message)
     if message.chat.type == 'private':
-        if message.text == 'Привет':
+        if message.text.lower() == 'привет':
             bot.send_message(message.chat.id, cp.hello())
         else:
             bot.send_message(message.chat.id, cp.random_kek())
@@ -47,8 +57,3 @@ def send_text(message):
 def send_sticker(message):
     stickers = bot.get_sticker_set(json_handler.constants['sticketset_name']).stickers
     bot.send_sticker(message.chat.id, cp.random_sticker(stickers))
-
-
-@bot.message_handler(content_types=['photo'])
-def send_sticker(message):
-    bot.send_photo(message.chat.id, cp.get_picture())

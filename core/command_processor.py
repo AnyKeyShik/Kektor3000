@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+#  Copyright (c) 2020.
+#
+#  Created by AnyKeyShik Rarity
+#
+#  Telegram: @AnyKeyShik
+#  GitHub: https://github.com/AnyKeyShik
+#  E-mail: nikitav59@gmail.com
+
 import os
 import random
 
@@ -65,18 +73,9 @@ class CommandProcessor(object):
         :rtype: str
         """
 
+        info(self.TAG, "Random KEK")
         num = random.randint(1, 100 * len(stickers))
         return stickers[num // 100].file_id
-
-    def get_picture(self):
-        """
-        Get picture file
-
-        :return: picture
-        :rtype: file
-        """
-
-        return open(self.picture_dir + json_handler.constants['default_picture'], 'rb')
 
     def roll(self, argument):
         """
@@ -91,7 +90,8 @@ class CommandProcessor(object):
         if len(argument) < 6:
             return json_handler.messages['no_choices_answer']
 
-        sentence = argument[6:]
+        debug(self.TAG, "Argument for roll: " + argument)
+        sentence = argument[argument.find(' ') + 1:]
         choices = sentence.split("или")
 
         while choices.count("или") != 0:
