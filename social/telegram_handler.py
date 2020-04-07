@@ -7,6 +7,12 @@
 #  Telegram: @AnyKeyShik
 #  GitHub: https://github.com/AnyKeyShik
 #  E-mail: nikitav59@gmail.com
+#
+#  Created by AnyKeyShik Rarity
+#
+#  Telegram: @AnyKeyShik
+#  GitHub: https://github.com/AnyKeyShik
+#  E-mail: nikitav59@gmail.com
 
 import telebot
 
@@ -46,7 +52,7 @@ def errors_message(message):
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     debug(TAG, message)
-    if message.chat.type == 'private':
+    if message.chat.type == 'private' or message.text.lower().find('кек') != -1:
         if message.text.lower() == 'привет':
             bot.send_message(message.chat.id, cp.hello())
         else:
